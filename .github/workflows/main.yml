@@ -15,7 +15,7 @@ jobs:
       id: build
       with:
         registry: ${{ env.REGISTRY }}
-        context: app/
+        context: ./app
         image-tag: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
         registry-username: ${{ github.actor }}
         registry-password: ${{ secrets.GH_TOKEN }}
