@@ -35,6 +35,7 @@ jobs:
       uses: docker/setup-qemu-action@v3
     - name: Test
       run: |
-        docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GH_TOKEN }}
+        docker login ghcr.io -u ${{ github.actor }} --password-stdin ${{ secrets.GH_TOKEN }}
+        docker run --rm -v .:/app ${{ needs.build.outputs.image_tag }} ls
         docker run --rm -v .:/app ${{ needs.build.outputs.image_tag }} pytest main.py
 
