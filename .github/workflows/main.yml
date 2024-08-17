@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Display ls
-      run: ls
+      run: ls ./app
     - name: Build and push image
       uses: ./.github/actions/build-and-push-images
       id: build
