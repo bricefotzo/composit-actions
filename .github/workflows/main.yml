@@ -18,6 +18,7 @@ jobs:
       with:
         registry: ${{ env.REGISTRY }}
         context: ./app
+        path: ./app/Dockerfile
         image-tag: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
         registry-username: ${{ github.actor }}
         registry-password: ${{ secrets.GH_TOKEN }}
