@@ -1,0 +1,58 @@
+name: 'Build and Push Image'
+description: 'Build and push a Docker image to a container registry'
+inputs:
+  context:
+    description: 'Path to the Docker build context'
+    required: true
+    default: '.'
+  image-tag:
+    description: 'Name of the image'
+    required: true
+  path:
+    description: 'Path to the Dockerfile'
+    required: false
+    default: 'Dockerfile'
+  registry:
+    description: 'Container registry to push the image to'
+    required: false
+    default: 'europe-west1-docker.pkg.dev'
+  registry-username:
+    description: 'Username to use for the build'
+    required: false
+    default: '_json_key'
+  registry-password:
+    description: 'Secrets to use for the build'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - uses: docker/setup-buildx-action@v3
+    - name: Log in to the Container registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ inputs.registry }}
+        username: ${{ inputs.registry-username }}
+        password: ${{ inputs.registry-password }}
+    - name: Extract metadata (tags, labels) for Docker
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ inputs.image-tag }}
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: ${{ inputs.context }}
+        file: ${{ inputs.path }}
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+    - name: Export metadata
+      run: |
+        echo "image_tags=${{ steps.meta.outputs.tags }}" >> $GITHUB_OUTPUT
+      shell: bash
+outputs:
+  image_tags:
+    description: "Tags of the built image"
+    value: ${{ steps.meta.outputs.tags }}
