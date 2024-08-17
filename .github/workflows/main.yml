@@ -37,5 +37,5 @@ jobs:
       run: |
         echo "${{ secrets.GH_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
         docker run --rm -v ./app:/app ${{ needs.build.outputs.image_tag }} ls
-        docker run --rm -v .:/app ${{ needs.build.outputs.image_tag }} pytest main.py
+        docker run --rm -v ./app:/app ${{ needs.build.outputs.image_tag }} pytest main.py
 
