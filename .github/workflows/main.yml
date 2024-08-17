@@ -36,5 +36,5 @@ jobs:
     - name: Test
       run: |
         docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GH_TOKEN }}
-        docker run --rm ${{ needs.build.outputs.image_tag }} -v .:/app pytest main.py
+        docker run --rm -v .:/app ${{ needs.build.outputs.image_tag }} pytest main.py
 
