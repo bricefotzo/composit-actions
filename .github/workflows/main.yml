@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+    - name: Display ls
+      run: ls
     - name: Build and push image
       uses: ./.github/actions/build-and-push-images
       id: build
